@@ -6,14 +6,13 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\TagController;
 
 
-Route::get('', function () {
+Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/admin', [MainController::class, 'index'])
-    ->name('admin.index'); // куда переходить, когда в строке /admin
-
-Route::prefix('admin')->group(function () {
-    Route::resource('categories', CategoryController::class);
-    Route::resource('tags', TagController::class);
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
+    Route::get('/', 'MainController@index')->name('admin.index');
+    Route::resource('/categories', 'CategoryController');
+    Route::resource('/tags', 'TagController');
+    Route::resource('/posts', 'PostController');
 });

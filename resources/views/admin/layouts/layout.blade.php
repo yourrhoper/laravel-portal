@@ -201,7 +201,7 @@
                 <a href="#" class="nav-link">
                   <i class="nav-icon fas fa-tags"></i>
                   <p>
-                    Тэги
+                    Теги
                     <i class="right fas fa-angle-left"></i>
                   </p>
                 </a>
@@ -209,13 +209,36 @@
                   <li class="nav-item">
                     <a href="{{route('tags.index')}}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
-                      <p>Список тэгов</p>
+                      <p>Список тегов</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="{{route('tags.create')}}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
-                      <p>Новый тэг</p>
+                      <p>Новый тег</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-edit"></i>
+                  <p>
+                    Посты
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{{route('posts.index')}}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Список постов</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{route('posts.create')}}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Новый пост</p>
                     </a>
                   </li>
                 </ul>

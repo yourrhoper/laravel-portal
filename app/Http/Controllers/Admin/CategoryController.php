@@ -21,17 +21,16 @@ class CategoryController extends Controller
         return view ('admin.categories.create');
     }
 
-public function store(StoreCategory $request)
-{
-    /*
-    $request->validate([
-        'title' => 'required',
-    ]);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required',
+        ]);
 
-    Category::create($request->all());
-*/
-    return redirect()->route('categories.index')->with('success', 'Категория добавлена');
-}
+        Category::create($request->all());
+//        $request->session()->flash('success', 'Категория добавлена');
+        return redirect()->route('categories.index')->with('success', 'Категория добавлена');
+    }
     
 
     public function show(string $id)

@@ -16,6 +16,8 @@
             <file>file:/C:/OSPanel/home/laravel.blog/.env</file>
             <file>file:/C:/OSPanel/home/laravel.blog/database/migrations/2026_10_02_071712_create_tags_table.php</file>
             <file>file:/C:/OSPanel/home/laravel.blog/database/migrations/2026_10_02_071756_create_posts_table.php</file>
+            <file>file:/C:/OSPanel/home/laravel.blog/public/assets/admin/css/admin.css</file>
+            <file>file:/C:/OSPanel/home/laravel.blog/public/assets/admin/css/adminlte.css</file>
         </group>
     </open-files>
 </project-private>
