@@ -36,6 +36,8 @@ public function store(Request $request)
         'published_at' => 'nullable|date',
     ]);
 
+    // dd($request->all());
+
     $data = $request->except(['_token', 'tags']); // без служебного поля и без тегов
     if ($request->hasFile('thumbnail')) {
         $data['thumbnail'] = $request->file('thumbnail')->store('posts', 'public');

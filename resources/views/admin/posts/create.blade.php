@@ -32,8 +32,9 @@
                 <div class="card-header">
                     <h3 class="card-title">Новый пост</h3>
                 </div>
+                <!-- /.card-header -->
 
-                <form method="POST" action="{{ route('posts.store') }}" enctype="multipart/form-data">
+                <form role="form" method="post" action="{{ route('posts.store') }}" enctype="multipart/form-data">
                     @csrf
 
                     <div class="card-body">
@@ -65,19 +66,17 @@
                                       class="form-control @error('content') is-invalid @enderror"
                                       placeholder="Полный текст поста">{{ old('content') }}</textarea>
                             @error('content')
-                                <span class="invalid-feedback">{{ $message }}</span>
+                                <span class="text-danger small">{{ $message }}</span>
                             @enderror
                         </div>
 
                         <div class="form-group">
                             <label for="category_id">Категория</label>
-                            <select name="category_id" id="category_id"
-                                    class="form-control @error('category_id') is-invalid @enderror">
+                            <select class="form-control @error('category_id') is-invalid @enderror"
+                                    id="category_id" name="category_id">
                                 <option value="">Выберите категорию</option>
-                                @foreach($categories as $id => $title)
-                                    <option value="{{ $id }}" @selected(old('category_id') == $id)>
-                                        {{ $title }}
-                                    </option>
+                                @foreach($categories as $k => $v)
+                                    <option value="{{ $k }}" @selected(old('category_id') == $k)>{{ $v }}</option>
                                 @endforeach
                             </select>
                             @error('category_id')
@@ -89,10 +88,8 @@
                             <label for="tags">Теги</label>
                             <select name="tags[]" id="tags" class="select2" multiple="multiple"
                                     data-placeholder="Выбор тегов" style="width: 100%;">
-                                @foreach($tags as $id => $title)
-                                    <option value="{{ $id }}" @selected(in_array($id, old('tags', [])))>
-                                        {{ $title }}
-                                    </option>
+                                @foreach($tags as $k => $v)
+                                    <option value="{{ $k }}" @selected(in_array($k, old('tags', [])))>{{ $v }}</option>
                                 @endforeach
                             </select>
                             @error('tags')
@@ -102,11 +99,15 @@
 
                         <div class="form-group">
                             <label for="thumbnail">Изображение</label>
-                            <input type="file" name="thumbnail" id="thumbnail"
-                                   class="form-control-file @error('thumbnail') is-invalid @enderror"
-                                   accept="image/*">
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" name="thumbnail" id="thumbnail"
+                                           class="custom-file-input" accept="image/*">
+                                    <label class="custom-file-label" for="thumbnail">Выберите файл</label>
+                                </div>
+                            </div>
                             @error('thumbnail')
-                                <span class="invalid-feedback d-block">{{ $message }}</span>
+                                <span class="text-danger small d-block">{{ $message }}</span>
                             @enderror
                         </div>
 
@@ -124,6 +125,7 @@
                         </div>
 
                     </div>
+                    <!-- /.card-body -->
 
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary">Сохранить</button>
@@ -131,6 +133,7 @@
                     </div>
                 </form>
             </div>
+            <!-- /.card -->
         </div>
     </div>
 </section>
