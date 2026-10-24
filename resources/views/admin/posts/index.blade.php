@@ -42,7 +42,10 @@
                             <tr>
                                 <th style="width: 10px">#</th>
                                 <th>Название</th>
-                                <th>Slug</th>
+                                <th>Категория</th>
+                                <th>Теги</th>
+                                <th>Просмотры</th>
+                                <th>Статус</th>
                                 <th>Действия</th>
                             </tr>
                         </thead>
@@ -51,14 +54,33 @@
                                 <tr>
                                     <td>{{ $post->id }}</td>
                                     <td>{{ $post->title }}</td>
-                                    <td>{{ $post->slug }}</td>
+                                    <td>{{ $post->category?->title }}</td>
                                     <td>
-                                        <a href="{{ route('posts.edit', $category->id) }}"
+                                        @foreach($post->tags as $tag)
+                                            <span class="badge badge-secondary">{{ $tag->title }}</span>
+                                        @endforeach
+                                    </td>
+                                    <td>{{ $post->views }}</td>
+                                    <td>
+                                        @if (!$post->published_at)
+                                            <span class="badge badge-secondary">Черновик</span>
+                                        @elseif ($post->published_at->isFuture())
+                                            <span class="badge badge-warning">
+                                                Запланирован на {{ $post->published_at->format('d.m.Y H:i') }}
+                                            </span>
+                                        @else
+                                            <span class="badge badge-success">
+                                                Опубликован {{ $post->published_at->format('d.m.Y') }}
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('posts.edit', $post->id) }}"
                                            class="btn btn-info btn-sm"
                                            title="Редактировать">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('posts.destroy', $category->id) }}"
+                                        <form action="{{ route('posts.destroy', $post->id) }}"
                                               method="POST"
                                               style="display: inline-block">
                                             @csrf
@@ -75,6 +97,9 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div class="card-footer">
+                {{ $posts->links() }}
             </div>
         @else
             <div class="card-body">

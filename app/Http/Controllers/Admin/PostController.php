@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -11,21 +13,37 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::paginate(20);
+        $posts = Post::with(['category', 'tags'])->paginate(20); // with(): загрузка связей
        // dd($categories);
         return view('admin.posts.index', compact('posts'));
     }
 
     public function create()
     {
-        return view ('admin.posts.create');
+        $categories = Category::pluck('title', 'id')->all(); 
+        $tags = Tag::pluck('title', 'id')->all();            
+        return view ('admin.posts.create', compact('categories', 'tags')); 
     }
 
-public function store(StoreCategory $request)
+public function store(Request $request)
 {
     $request->validate([
         'title' => 'required',
+        'description' => 'required',                        
+        'content' => 'required',                             
+        'category_id' => 'required|integer',
+        'thumbnail' => 'nullable|image',
+        'published_at' => 'nullable|date',
     ]);
+
+    $data = $request->all();
+    if ($request->hasFile('thumbnail')) {
+        $data['thumbnail'] = $request->file('thumbnail')->store('posts', 'public');
+    }
+    $data['user_id'] = auth()->id(); // пока нет входа, будет null
+
+    $post = Post::create($data); 
+    $post->tags()->sync($request->tags);// привязка тегов
 
     return redirect()->route('posts.index')->with('success', 'Пост добавлен');
 }
@@ -38,22 +56,39 @@ public function store(StoreCategory $request)
 
     public function edit(string $id)
     {
-        return view('admin.posts.edit');
+        $post = Post::findOrFail($id);
+        $categories = Category::pluck('title', 'id')->all(); 
+        $tags = Tag::pluck('title', 'id')->all();
+        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'title' => 'required'
+            'title' => 'required',
+            'description' => 'required',   
+            'content' => 'required', 
+            'category_id' => 'required|integer',
+            'thumbnail' => 'nullable|image',
+            'published_at' => 'nullable|date',
         ]);
+
+        $post = Post::findOrFail($id);  
+        $data = $request->all(); 
+        if ($request->hasFile('thumbnail')) {
+            $data['thumbnail'] = $request->file('thumbnail')->store('posts', 'public');
+        }
+        $post->update($data);
+        $post->tags()->sync($request->tags);
 
         return redirect()->route('posts.index')->with('success', 'Изменения сохранены');
     }
 
     public function destroy(string $id)
     {
-        //        $category = Category::find($id);
-        //        $category->delete();
+        $post = Post::findOrFail($id);
+        $post->tags()->sync([]); // отвязать теги
+        $post->delete();
         return redirect()->route('posts.index')->with('success', 'Пост удален');
     }
 }
