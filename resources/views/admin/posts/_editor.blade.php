@@ -7,6 +7,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/lang/summernote-ru-RU.min.js"></script>
 <script>
 $(function () {
+    // визуальный редактор для поля «Текст»
     $('#content').summernote({
         lang: 'ru-RU',
         height: 400,
@@ -19,6 +20,7 @@ $(function () {
         }
     });
 
+    // загрузка картинки на сервер и вставка её адреса в текст
     function uploadImage(file) {
         const data = new FormData();
         data.append('image', file);
@@ -40,6 +42,11 @@ $(function () {
             }
         });
     }
+
+    // показать имя выбранного файла в поле custom-file
+    $('.custom-file-input').on('change', function () {
+        $(this).next('.custom-file-label').text(this.files[0] ? this.files[0].name : 'Выберите файл');
+    });
 });
 </script>
 @endpush

@@ -3,21 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/OSPanel/home/laravel.blog/app/Http/Controllers/Admin/TagController.php</file>
-            <file>file:/C:/OSPanel/home/laravel.blog/resources/views/admin/tags/create.blade.php</file>
-            <file>file:/C:/OSPanel/home/laravel.blog/resources/views/admin/tags/edit.blade.php</file>
-            <file>file:/C:/OSPanel/home/laravel.blog/resources/views/admin/tags/index.blade.php</file>
-            <file>file:/C:/OSPanel/home/laravel.blog/routes/web.php</file>
-            <file>file:/C:/OSPanel/home/laravel.blog/app/Models/Tag.php</file>
+            <file>file:/C:/OSPanel/home/laravel.blog/app/Http/Controllers/Admin/PostController.php</file>
+            <file>file:/C:/OSPanel/home/laravel.blog/resources/views/admin/posts/create.blade.php</file>
+            <file>file:/C:/OSPanel/home/laravel.blog/resources/views/admin/posts/index.blade.php</file>
+            <file>file:/C:/OSPanel/home/laravel.blog/app/Models/Post.php</file>
+            <file>file:/C:/OSPanel/home/laravel.blog/resources/views/admin/posts/edit.blade.php</file>
             <file>file:/C:/OSPanel/home/laravel.blog/resources/views/admin/layouts/layout.blade.php</file>
-            <file>file:/C:/OSPanel/home/laravel.blog/app/Models/Category.php</file>
-            <file>file:/C:/OSPanel/home/laravel.blog/resources/views/admin/categories/edit.blade.php</file>
-            <file>file:/C:/OSPanel/home/laravel.blog/app/Http/Controllers/Admin/MainController.php</file>
-            <file>file:/C:/OSPanel/home/laravel.blog/.env</file>
-            <file>file:/C:/OSPanel/home/laravel.blog/database/migrations/2026_10_02_071712_create_tags_table.php</file>
-            <file>file:/C:/OSPanel/home/laravel.blog/database/migrations/2026_10_02_071756_create_posts_table.php</file>
-            <file>file:/C:/OSPanel/home/laravel.blog/public/assets/admin/css/admin.css</file>
-            <file>file:/C:/OSPanel/home/laravel.blog/public/assets/admin/css/adminlte.css</file>
+            <file>file:/C:/OSPanel/home/laravel.blog/resources/views/admin/posts/_editor.blade.php</file>
+            <file>file:/C:/OSPanel/home/laravel.blog/webpack.mix.js</file>
         </group>
     </open-files>
 </project-private>

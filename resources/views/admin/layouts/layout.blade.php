@@ -8,7 +8,7 @@
       <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
       <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
       <link rel="stylesheet" href="{{asset('assets/admin/css/admin.css')}}">
-      @stack('styles')
+      @stack('styles') {{-- <- сюда страницы добавляют свои стили (Summernote) --}}
     </head>
     <body class="hold-transition sidebar-mini">
     <!-- Site wrapper -->
@@ -174,6 +174,32 @@
                   </p>
                 </a>
               </li>
+
+              {{-- <- новый пункт меню: Посты --}}
+              <li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fas fa-newspaper"></i>
+                  <p>
+                    Посты
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{{route('posts.index')}}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Список постов</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{route('posts.create')}}" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Новый пост</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
               <li class="nav-item has-treeview">
                 <a href="#" class="nav-link">
                   <i class="nav-icon fas fa-archive"></i>
@@ -197,12 +223,12 @@
                   </li>
                 </ul>
               </li>
-              
+
               <li class="nav-item has-treeview">
                 <a href="#" class="nav-link">
                   <i class="nav-icon fas fa-tags"></i>
                   <p>
-                    Теги
+                    Тэги
                     <i class="right fas fa-angle-left"></i>
                   </p>
                 </a>
@@ -210,36 +236,13 @@
                   <li class="nav-item">
                     <a href="{{route('tags.index')}}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
-                      <p>Список тегов</p>
+                      <p>Список тэгов</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="{{route('tags.create')}}" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
-                      <p>Новый тег</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item has-treeview">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon fas fa-edit"></i>
-                  <p>
-                    Посты
-                    <i class="right fas fa-angle-left"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="{{route('posts.index')}}" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Список постов</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{route('posts.create')}}" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Новый пост</p>
+                      <p>Новый тэг</p>
                     </a>
                   </li>
                 </ul>
@@ -252,10 +255,10 @@
       </aside>
 
         <!-- Content Wrapper. Contains page content -->
-        
+
 
         <div class="content-wrapper">
-            
+
             <div class="container mt-2">
                 <div class="row">
                     <div class="col-12">
@@ -268,7 +271,7 @@
                             </ul>
                         </div>
                     @endif
-                    
+
                     @if (session('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             <i class="fas fa-check-circle mr-2"></i>
@@ -278,11 +281,11 @@
                             </button>
                         </div>
                     @endif
-                    </div> 
+                    </div>
                 </div>
             </div>
-            
-            
+
+
         @yield('content')
         </div>
         <!-- /.content-wrapper -->
@@ -301,9 +304,14 @@
       <!-- /.control-sidebar -->
     </div>
     <!-- ./wrapper -->
+
+
     <script src="{{asset('assets/admin/js/admin.js')}}"></script>
     @stack('scripts')
     <script>
+        запуск Select2 для всех select с классом select2
+        $('.select2').select2({ theme: 'bootstrap4' });
+
         $('.nav-sidebar a').each(function() {
             let location = window.location.protocol + '//' + window.location.host + window.location.pathname;
             let link = this.href;
@@ -313,6 +321,5 @@
             }
         });
     </script>
-    
     </body>
     </html>

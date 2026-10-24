@@ -63,7 +63,8 @@
                             <textarea name="content" id="content" rows="10"
                                       class="form-control @error('content') is-invalid @enderror">{{ old('content', $post->content) }}</textarea>
                             @error('content')
-                                <span class="invalid-feedback">{{ $message }}</span>
+                                {{-- <- text-danger вместо invalid-feedback: рядом с редактором Summernote он не показывается --}}
+                                <span class="text-danger small">{{ $message }}</span>
                             @enderror
                         </div>
 
@@ -84,10 +85,11 @@
                             @enderror
                         </div>
 
+                        {{-- <- теги: класс select2, подсказка и ширина 100% --}}
                         <div class="form-group">
                             <label for="tags">Теги</label>
-                            <select name="tags[]" id="tags" multiple
-                                    class="form-control @error('tags') is-invalid @enderror">
+                            <select name="tags[]" id="tags" class="select2" multiple="multiple"
+                                    data-placeholder="Выбор тегов" style="width: 100%;">
                                 @foreach($tags as $id => $title)
                                     <option value="{{ $id }}"
                                         @selected(in_array($id, old('tags', $post->tags->pluck('id')->all())))>
@@ -95,26 +97,28 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <small class="text-muted">Несколько тегов: удерживайте Ctrl</small>
                             @error('tags')
-                                <span class="invalid-feedback d-block">{{ $message }}</span>
+                                <span class="text-danger small d-block">{{ $message }}</span>
                             @enderror
                         </div>
 
+                        {{-- <- обложка: поле custom-file, как в create --}}
                         <div class="form-group">
-                            <label for="thumbnail">Изображение</label>
+                            <label for="thumbnail">Изображение (обложка)</label>
                             @if ($post->thumbnail)
                                 <div class="mb-2">
                                     <img src="{{ asset('storage/' . $post->thumbnail) }}"
                                          alt="" class="img-thumbnail" style="max-height: 150px;">
                                 </div>
                             @endif
-                            <input type="file" name="thumbnail" id="thumbnail"
-                                   class="form-control-file @error('thumbnail') is-invalid @enderror"
-                                   accept="image/*">
+                            <div class="custom-file">
+                                <input type="file" name="thumbnail" id="thumbnail"
+                                       class="custom-file-input" accept="image/*">
+                                <label class="custom-file-label" for="thumbnail">Выберите файл</label>
+                            </div>
                             <small class="text-muted">Оставьте пустым, чтобы сохранить текущее изображение</small>
                             @error('thumbnail')
-                                <span class="invalid-feedback d-block">{{ $message }}</span>
+                                <span class="text-danger small d-block">{{ $message }}</span>
                             @enderror
                         </div>
 
