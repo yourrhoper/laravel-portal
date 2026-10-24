@@ -8,6 +8,7 @@
       <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
       <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
       <link rel="stylesheet" href="{{asset('assets/admin/css/admin.css')}}">
+      @stack('styles')
     </head>
     <body class="hold-transition sidebar-mini">
     <!-- Site wrapper -->
@@ -301,7 +302,7 @@
     </div>
     <!-- ./wrapper -->
     <script src="{{asset('assets/admin/js/admin.js')}}"></script>
-    <script src="{{ asset('assets/admin/js/admin.js') }}"></script>
+    @stack('scripts')
     <script>
         $('.nav-sidebar a').each(function() {
             let location = window.location.protocol + '//' + window.location.host + window.location.pathname;
@@ -312,5 +313,6 @@
             }
         });
     </script>
+    
     </body>
     </html>

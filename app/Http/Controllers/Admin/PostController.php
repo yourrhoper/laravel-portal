@@ -91,4 +91,15 @@ public function store(Request $request)
         $post->delete();
         return redirect()->route('posts.index')->with('success', 'Пост удален');
     }
+    
+        public function uploadImage(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp,gif|max:5120',
+        ]);
+
+        $path = $request->file('image')->store('posts/content', 'public');
+
+        return response()->json(['url' => asset('storage/' . $path)]);
+    }
 }

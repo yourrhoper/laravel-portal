@@ -135,5 +135,5 @@
         </div>
     </div>
 </section>
-
+@include('admin.posts._editor')
 @endsection
