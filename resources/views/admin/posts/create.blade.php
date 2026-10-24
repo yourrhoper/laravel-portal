@@ -87,17 +87,16 @@
 
                         <div class="form-group">
                             <label for="tags">Теги</label>
-                            <select name="tags[]" id="tags" multiple
-                                    class="form-control @error('tags') is-invalid @enderror">
+                            <select name="tags[]" id="tags" class="select2" multiple="multiple"
+                                    data-placeholder="Выбор тегов" style="width: 100%;">
                                 @foreach($tags as $id => $title)
                                     <option value="{{ $id }}" @selected(in_array($id, old('tags', [])))>
                                         {{ $title }}
                                     </option>
                                 @endforeach
                             </select>
-                            <small class="text-muted">Несколько тегов: удерживайте Ctrl</small>
                             @error('tags')
-                                <span class="invalid-feedback d-block">{{ $message }}</span>
+                                <span class="text-danger small d-block">{{ $message }}</span>
                             @enderror
                         </div>
 

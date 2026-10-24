@@ -309,7 +309,7 @@
     <script src="{{asset('assets/admin/js/admin.js')}}"></script>
     @stack('scripts')
     <script>
-        запуск Select2 для всех select с классом select2
+        // запуск Select2 для всех select с классом select2
         $('.select2').select2({ theme: 'bootstrap4' });
 
         $('.nav-sidebar a').each(function() {
