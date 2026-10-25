@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage; 
 
 class PostController extends Controller
 
@@ -36,12 +37,8 @@ public function store(Request $request)
         'published_at' => 'nullable|date',
     ]);
 
-    $data = $request->except(['_token', 'tags']); // в видео: $request->all()
-
-    if ($request->hasFile('thumbnail')) {
-        $folder = date('Y-m-d');
-        $data['thumbnail'] = $request->file('thumbnail')->store("images/{$folder}");
-    }
+    $data = $request->except(['_token', 'tags']);
+    $data['thumbnail'] = Post::uploadImage($request); 
     $data['user_id'] = auth()->id(); // пока нет входа, будет null
 
     $post = Post::create($data);
@@ -77,11 +74,7 @@ public function store(Request $request)
 
         $post = Post::findOrFail($id);
         $data = $request->except(['_token', '_method', 'tags']);
-
-        if ($request->hasFile('thumbnail')) {
-            $folder = date('Y-m-d');
-            $data['thumbnail'] = $request->file('thumbnail')->store("images/{$folder}");
-        }
+        $data['thumbnail'] = Post::uploadImage($request, $post->thumbnail); // удаляет старый файл при замене
 
         $post->update($data);
         $post->tags()->sync($request->input('tags', []));
@@ -93,10 +86,14 @@ public function store(Request $request)
     {
         $post = Post::findOrFail($id);
         $post->tags()->sync([]); // отвязать теги
+        if ($post->thumbnail) {  // <- удалить файл картинки
+            Storage::delete($post->thumbnail);
+        }
         $post->delete();
         return redirect()->route('posts.index')->with('success', 'Пост удален');
     }
 
+    // загрузка картинок из редактора Summernote 
     public function uploadImage(Request $request)
     {
         $request->validate([
@@ -105,6 +102,6 @@ public function store(Request $request)
 
         $path = $request->file('image')->store('posts/content'); // диск по умолчанию public
 
-        return response()->json(['url' => asset('uploads/' . $path)]); //было asset('storage/...')
+        return response()->json(['url' => asset('uploads/' . $path)]);
     }
 }

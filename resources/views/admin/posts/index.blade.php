@@ -42,6 +42,7 @@
                             <tr>
                                 <th style="width: 10px">#</th>
                                 <th>Название</th>
+                                <th>Краткое описание</th> {{-- <- новый столбец --}}
                                 <th>Категория</th>
                                 <th>Теги</th>
                                 <th>Просмотры</th>
@@ -54,12 +55,11 @@
                                 <tr>
                                     <td>{{ $post->id }}</td>
                                     <td>{{ $post->title }}</td>
-                                    <td>{{ $post->category?->title }}</td>
-                                    <td>
-                                        @foreach($post->tags as $tag)
-                                            <span class="badge badge-secondary">{{ $tag->title }}</span>
-                                        @endforeach
+                                    <td style="min-width: 220px; white-space: normal;">
+                                        {{ \Illuminate\Support\Str::limit($post->description, 80) }} {{-- <- первые 80 символов --}}
                                     </td>
+                                    <td>{{ $post->category?->title }}</td>
+                                    <td>{{ $post->tags->pluck('title')->join(', ') }}</td>
                                     <td>{{ $post->views }}</td>
                                     <td>
                                         @if (!$post->published_at)
@@ -75,20 +75,19 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('posts.edit', $post->id) }}"
-                                           class="btn btn-info btn-sm"
+                                        <a href="{{ route('posts.edit', ['post' => $post->id]) }}"
+                                           class="btn btn-info btn-sm float-left mr-1"
                                            title="Редактировать">
-                                            <i class="fas fa-edit"></i>
+                                            <i class="fas fa-pencil-alt"></i>
                                         </a>
-                                        <form action="{{ route('posts.destroy', $post->id) }}"
-                                              method="POST"
-                                              style="display: inline-block">
+                                        <form action="{{ route('posts.destroy', ['post' => $post->id]) }}"
+                                              method="post" class="float-left">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
                                                     class="btn btn-danger btn-sm"
                                                     onclick="return confirm('Подтвердите удаление')">
-                                                <i class="fas fa-trash"></i>
+                                                <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
                                     </td>

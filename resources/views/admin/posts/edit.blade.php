@@ -32,8 +32,11 @@
                 <div class="card-header">
                     <h3 class="card-title">Пост «{{ $post->title }}»</h3>
                 </div>
+                <!-- /.card-header -->
 
-                <form method="POST" action="{{ route('posts.update', $post->id) }}" enctype="multipart/form-data">
+                <form role="form" method="post"
+                      action="{{ route('posts.update', ['post' => $post->id]) }}"
+                      enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -63,21 +66,16 @@
                             <textarea name="content" id="content" rows="10"
                                       class="form-control @error('content') is-invalid @enderror">{{ old('content', $post->content) }}</textarea>
                             @error('content')
-                                {{-- <- text-danger вместо invalid-feedback: рядом с редактором Summernote он не показывается --}}
                                 <span class="text-danger small">{{ $message }}</span>
                             @enderror
                         </div>
 
                         <div class="form-group">
                             <label for="category_id">Категория</label>
-                            <select name="category_id" id="category_id"
-                                    class="form-control @error('category_id') is-invalid @enderror">
-                                <option value="">Выберите категорию</option>
-                                @foreach($categories as $id => $title)
-                                    <option value="{{ $id }}"
-                                        @selected(old('category_id', $post->category_id) == $id)>
-                                        {{ $title }}
-                                    </option>
+                            <select class="form-control @error('category_id') is-invalid @enderror"
+                                    id="category_id" name="category_id">
+                                @foreach($categories as $k => $v)
+                                    <option value="{{ $k }}" @if($k == old('category_id', $post->category_id)) selected @endif>{{ $v }}</option>
                                 @endforeach
                             </select>
                             @error('category_id')
@@ -85,16 +83,12 @@
                             @enderror
                         </div>
 
-                        {{-- <- теги: класс select2, подсказка и ширина 100% --}}
                         <div class="form-group">
                             <label for="tags">Теги</label>
                             <select name="tags[]" id="tags" class="select2" multiple="multiple"
                                     data-placeholder="Выбор тегов" style="width: 100%;">
-                                @foreach($tags as $id => $title)
-                                    <option value="{{ $id }}"
-                                        @selected(in_array($id, old('tags', $post->tags->pluck('id')->all())))>
-                                        {{ $title }}
-                                    </option>
+                                @foreach($tags as $k => $v)
+                                    <option value="{{ $k }}" @if(in_array($k, old('tags', $post->tags->pluck('id')->all()))) selected @endif>{{ $v }}</option>
                                 @endforeach
                             </select>
                             @error('tags')
@@ -102,20 +96,17 @@
                             @enderror
                         </div>
 
-                        {{-- <- обложка: поле custom-file, как в create --}}
                         <div class="form-group">
-                            <label for="thumbnail">Изображение (обложка)</label>
-                            @if ($post->thumbnail)
-                                <div class="mb-2">
-                                    <img src="{{ asset('storage/' . $post->thumbnail) }}"
-                                         alt="" class="img-thumbnail" style="max-height: 150px;">
+                            <label for="thumbnail">Изображение</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" name="thumbnail" id="thumbnail"
+                                           class="custom-file-input" accept="image/*">
+                                    <label class="custom-file-label" for="thumbnail">Выберите файл</label>
                                 </div>
-                            @endif
-                            <div class="custom-file">
-                                <input type="file" name="thumbnail" id="thumbnail"
-                                       class="custom-file-input" accept="image/*">
-                                <label class="custom-file-label" for="thumbnail">Выберите файл</label>
                             </div>
+                            {{-- <- превью: текущая картинка или заглушка no-image.png --}}
+                            <div><img src="{{ $post->getImage() }}" alt="" class="img-thumbnail mt-2 mb-2" width="200"></div>
                             <small class="text-muted">Оставьте пустым, чтобы сохранить текущее изображение</small>
                             @error('thumbnail')
                                 <span class="text-danger small d-block">{{ $message }}</span>
@@ -136,6 +127,7 @@
                         </div>
 
                     </div>
+                    <!-- /.card-body -->
 
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary">Сохранить</button>
@@ -143,6 +135,7 @@
                     </div>
                 </form>
             </div>
+            <!-- /.card -->
         </div>
     </div>
 </section>

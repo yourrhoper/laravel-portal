@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class Post extends Model
 {
@@ -21,7 +23,7 @@ class Post extends Model
     ];
 
     public function tags() {
-        return $this->belongsToMany(Tag::class)->withTimestamps(); // <- withTimestamps()
+        return $this->belongsToMany(Tag::class)->withTimestamps();
     }
 
     public function category() {
@@ -40,6 +42,28 @@ class Post extends Model
                 'source' => 'title'
             ]
         ];
+    }
+
+    // загрузка картинки: общий код для store() и update()
+    public static function uploadImage(Request $request, $image = null)
+    {
+        if ($request->hasFile('thumbnail')) {
+            if ($image) {
+                Storage::delete($image); // удалить старый файл
+            }
+            $folder = date('Y-m-d');
+            return $request->file('thumbnail')->store("images/{$folder}");
+        }
+        return $image; // без нового файла сохраняем прежний путь
+    }
+
+    // адрес картинки для шаблонов
+    public function getImage()
+    {
+        if (!$this->thumbnail) {
+            return asset("no-image.png");
+        }
+        return asset("uploads/{$this->thumbnail}");
     }
 
     public function scopePublished($query)
