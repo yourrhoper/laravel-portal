@@ -36,16 +36,16 @@ public function store(Request $request)
         'published_at' => 'nullable|date',
     ]);
 
-    // dd($request->all());
+    $data = $request->except(['_token', 'tags']); // в видео: $request->all()
 
-    $data = $request->except(['_token', 'tags']); // без служебного поля и без тегов
     if ($request->hasFile('thumbnail')) {
-        $data['thumbnail'] = $request->file('thumbnail')->store('posts', 'public');
+        $folder = date('Y-m-d');
+        $data['thumbnail'] = $request->file('thumbnail')->store("images/{$folder}");
     }
     $data['user_id'] = auth()->id(); // пока нет входа, будет null
 
     $post = Post::create($data);
-    $post->tags()->sync($request->input('tags', [])); // привязка тегов
+    $post->tags()->sync($request->input('tags', []));
 
     return redirect()->route('posts.index')->with('success', 'Пост добавлен');
 }
@@ -76,10 +76,13 @@ public function store(Request $request)
         ]);
 
         $post = Post::findOrFail($id);
-        $data = $request->except(['_token', '_method', 'tags']); // <- без служебных полей и тегов
+        $data = $request->except(['_token', '_method', 'tags']);
+
         if ($request->hasFile('thumbnail')) {
-            $data['thumbnail'] = $request->file('thumbnail')->store('posts', 'public');
+            $folder = date('Y-m-d');
+            $data['thumbnail'] = $request->file('thumbnail')->store("images/{$folder}");
         }
+
         $post->update($data);
         $post->tags()->sync($request->input('tags', []));
 
@@ -100,8 +103,8 @@ public function store(Request $request)
             'image' => 'required|image|mimes:jpg,jpeg,png,webp,gif|max:5120',
         ]);
 
-        $path = $request->file('image')->store('posts/content', 'public');
+        $path = $request->file('image')->store('posts/content'); // диск по умолчанию public
 
-        return response()->json(['url' => asset('storage/' . $path)]);
+        return response()->json(['url' => asset('uploads/' . $path)]); //было asset('storage/...')
     }
 }
