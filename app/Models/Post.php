@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\PostType;
+use App\Enums\Reliability;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -15,11 +17,13 @@ class Post extends Model
     protected $fillable = [
         'title', 'description', 'content',
         'category_id', 'user_id', 'thumbnail', 'published_at',
+        'type', 'reliability', // <- тип поста и метка достоверности
     ];
 
-    // published_at становится датой (работают ->format(), ->isFuture())
     protected $casts = [
         'published_at' => 'datetime',
+        'type' => PostType::class,           // <- в коде это объект PostType, в БД строка
+        'reliability' => Reliability::class, // <- то же для метки (может быть null)
     ];
 
     public function tags() {
@@ -28,6 +32,11 @@ class Post extends Model
 
     public function category() {
         return $this->belongsTo(Category::class);
+    }
+
+    // <- у поста много источников
+    public function sources() {
+        return $this->hasMany(Source::class);
     }
 
         /**

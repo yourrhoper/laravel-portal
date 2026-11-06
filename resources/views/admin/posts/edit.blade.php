@@ -52,6 +52,39 @@
                             @enderror
                         </div>
 
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="type">Тип поста</label>
+                                    <select name="type" id="type"
+                                            class="form-control @error('type') is-invalid @enderror">
+                                        @foreach(\App\Enums\PostType::cases() as $case)
+                                            <option value="{{ $case->value }}" @selected(old('type', $post->type?->value) == $case->value)>{{ $case->label() }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('type')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="reliability">Метка достоверности</label>
+                                    <select name="reliability" id="reliability"
+                                            class="form-control @error('reliability') is-invalid @enderror">
+                                        <option value="">Без метки</option>
+                                        @foreach(\App\Enums\Reliability::cases() as $case)
+                                            <option value="{{ $case->value }}" @selected(old('reliability', $post->reliability?->value) == $case->value)>{{ $case->emoji() }} {{ $case->label() }}</option>
+                                        @endforeach
+                                    </select>
+                                    <small class="text-muted">Необязательно: для обычной новости метка не нужна.</small>
+                                    @error('reliability')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label for="description">Краткое описание</label>
                             <textarea name="description" id="description" rows="3"
@@ -105,7 +138,6 @@
                                     <label class="custom-file-label" for="thumbnail">Выберите файл</label>
                                 </div>
                             </div>
-                            {{-- <- превью: текущая картинка или заглушка no-image.png --}}
                             <div><img src="{{ $post->getImage() }}" alt="" class="img-thumbnail mt-2 mb-2" width="200"></div>
                             <small class="text-muted">Оставьте пустым, чтобы сохранить текущее изображение</small>
                             @error('thumbnail')
@@ -125,6 +157,9 @@
                                 <span class="invalid-feedback d-block">{{ $message }}</span>
                             @enderror
                         </div>
+
+                        {{-- блок источников (новое) --}}
+                        @include('admin.posts._sources')
 
                     </div>
                     <!-- /.card-body -->

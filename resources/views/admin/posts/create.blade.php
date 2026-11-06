@@ -50,6 +50,39 @@
                             @enderror
                         </div>
 
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="type">Тип поста</label>
+                                    <select name="type" id="type"
+                                            class="form-control @error('type') is-invalid @enderror">
+                                        @foreach(\App\Enums\PostType::cases() as $case)
+                                            <option value="{{ $case->value }}" @selected(old('type', 'site') == $case->value)>{{ $case->label() }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('type')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="reliability">Метка достоверности</label>
+                                    <select name="reliability" id="reliability"
+                                            class="form-control @error('reliability') is-invalid @enderror">
+                                        <option value="">Без метки</option>
+                                        @foreach(\App\Enums\Reliability::cases() as $case)
+                                            <option value="{{ $case->value }}" @selected(old('reliability') == $case->value)>{{ $case->emoji() }} {{ $case->label() }}</option>
+                                        @endforeach
+                                    </select>
+                                    <small class="text-muted">Необязательно: для обычной новости метка не нужна.</small>
+                                    @error('reliability')
+                                        <span class="invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label for="description">Краткое описание</label>
                             <textarea name="description" id="description" rows="3"
@@ -74,9 +107,8 @@
                             <label for="category_id">Категория</label>
                             <select class="form-control @error('category_id') is-invalid @enderror"
                                     id="category_id" name="category_id">
-                                <option value="">Выберите категорию</option>
                                 @foreach($categories as $k => $v)
-                                    <option value="{{ $k }}" @selected(old('category_id') == $k)>{{ $v }}</option>
+                                    <option value="{{ $k }}" @selected(old('category_id', array_key_first($categories)) == $k)>{{ $v }}</option>
                                 @endforeach
                             </select>
                             @error('category_id')
@@ -123,6 +155,9 @@
                                 <span class="invalid-feedback d-block">{{ $message }}</span>
                             @enderror
                         </div>
+
+                        {{-- блок источников (новое) --}}
+                        @include('admin.posts._sources')
 
                     </div>
                     <!-- /.card-body -->

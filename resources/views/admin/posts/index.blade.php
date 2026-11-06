@@ -40,11 +40,14 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th style="width: 10px">#</th>
+                                <th style="width: 10px">№</th>
                                 <th>Название</th>
-                                <th>Краткое описание</th> {{-- <- новый столбец --}}
+                                <th>Краткое описание</th>
+                                <th>Тип</th>
+                                <th>Метка</th>
                                 <th>Категория</th>
                                 <th>Теги</th>
+                                <th>Источники</th>
                                 <th>Просмотры</th>
                                 <th>Статус</th>
                                 <th>Действия</th>
@@ -53,13 +56,27 @@
                         <tbody>
                             @foreach($posts as $post)
                                 <tr>
-                                    <td>{{ $post->id }}</td>
+                                    {{-- порядковый номер: считается при каждом показе страницы,
+                                         поэтому после удаления записи нумерация сама сдвигается --}}
+                                    <td>{{ $posts->firstItem() + $loop->index }}</td>
                                     <td>{{ $post->title }}</td>
                                     <td style="min-width: 220px; white-space: normal;">
-                                        {{ \Illuminate\Support\Str::limit($post->description, 80) }} {{-- <- первые 80 символов --}}
+                                        {{ \Illuminate\Support\Str::limit($post->description, 80) }}
+                                    </td>
+                                    <td>{{ $post->type?->label() }}</td>
+                                    <td>
+                                        @if ($post->reliability)
+                                            <span class="badge"
+                                                  style="background-color: {{ $post->reliability->color() }}; color: {{ $post->reliability->textColor() }};">
+                                                {{ $post->reliability->emoji() }} {{ $post->reliability->label() }}
+                                            </span>
+                                        @else
+                                            <span class="text-muted">—</span>
+                                        @endif
                                     </td>
                                     <td>{{ $post->category?->title }}</td>
                                     <td>{{ $post->tags->pluck('title')->join(', ') }}</td>
+                                    <td>{{ $post->sources_count }}</td>
                                     <td>{{ $post->views }}</td>
                                     <td>
                                         @if (!$post->published_at)

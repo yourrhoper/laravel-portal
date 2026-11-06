@@ -40,7 +40,7 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th style="width: 10px">#</th>
+                                <th style="width: 10px">№</th>
                                 <th>Название</th>
                                 <th>Slug</th>
                                 <th>Действия</th>
@@ -49,7 +49,7 @@
                         <tbody>
                             @foreach($categories as $category)
                                 <tr>
-                                    <td>{{ $category->id }}</td>
+                                    <td>{{ $categories->firstItem() + $loop->index }}</td>
                                     <td>{{ $category->title }}</td>
                                     <td>{{ $category->slug }}</td>
                                     <td>
@@ -75,6 +75,9 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div class="card-footer">
+                {{ $categories->links() }}
             </div>
         @else
             <div class="card-body">

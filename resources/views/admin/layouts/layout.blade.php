@@ -175,7 +175,6 @@
                 </a>
               </li>
 
-              {{-- <- новый пункт меню: Посты --}}
               <li class="nav-item has-treeview">
                 <a href="#" class="nav-link">
                   <i class="nav-icon fas fa-newspaper"></i>

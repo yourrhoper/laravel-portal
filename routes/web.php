@@ -16,5 +16,4 @@ Route::prefix('admin')->group(function () {
     Route::resource('tags', TagController::class);
     Route::post('/posts/upload-image', [PostController::class, 'uploadImage'])->name('posts.upload-image');
     Route::resource('posts', PostController::class);
-    Route::resource('posts', PostController::class);
 });
