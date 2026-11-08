@@ -69,9 +69,13 @@ public function store(Request $request)
         $request->validate($this->rules(), $this->messages());
         $this->checkSources($request, $post);
 
-        $data = $request->except(['_token', '_method', 'tags', 'sources']);
+        $data = $request->except(['_token', '_method', 'tags', 'sources', 'remove_thumbnail']); // <-
         $data['reliability'] = $request->input('reliability') ?: null;
-        $data['thumbnail'] = Post::uploadImage($request, $post->thumbnail);
+        $data['thumbnail'] = Post::uploadImage(
+            $request,
+            $post->thumbnail,
+            $request->boolean('remove_thumbnail') // <- чекбокс «Удалить изображение»
+        );
 
         $post->update($data);
         $post->tags()->sync($request->input('tags', []));
@@ -123,6 +127,7 @@ public function store(Request $request)
             'type' => ['required', Rule::enum(PostType::class)],
             'reliability' => ['nullable', Rule::enum(Reliability::class)], // метка необязательна
             'thumbnail' => 'nullable|image',
+            'remove_thumbnail' => 'nullable|boolean', // <-
             'published_at' => 'nullable|date',
 
             // источники: минимум один

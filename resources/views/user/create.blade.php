@@ -17,11 +17,6 @@
   <div class="card">
     <div class="card-body register-card-body">
 
-      {{-- сообщение об успешной регистрации (flash-данные из контроллера) --}}
-      @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-      @endif
-
       {{-- ошибки валидации: общий список --}}
       @if ($errors->any())
         <div class="alert alert-danger">
@@ -75,6 +70,8 @@
           </div>
         </div>
       </form>
+
+      <a href="{{ route('login.create') }}" class="text-center d-block mt-3">Уже есть аккаунт</a>
 
     </div>
   </div>

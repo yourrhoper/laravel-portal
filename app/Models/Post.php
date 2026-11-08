@@ -54,16 +54,23 @@ class Post extends Model
     }
 
     // загрузка картинки: общий код для store() и update()
-    public static function uploadImage(Request $request, $image = null)
+    // $remove — явный запрос на удаление текущей картинки без замены (чекбокс в форме)
+    public static function uploadImage(Request $request, $image = null, bool $remove = false)
     {
         if ($request->hasFile('thumbnail')) {
             if ($image) {
-                Storage::delete($image); // удалить старый файл
+                Storage::delete($image); // заменяем: старый файл удаляем
             }
             $folder = date('Y-m-d');
             return $request->file('thumbnail')->store("images/{$folder}");
         }
-        return $image; // без нового файла сохраняем прежний путь
+
+        if ($remove && $image) {
+            Storage::delete($image); // <- явное удаление без замены
+            return null;
+        }
+
+        return $image; // ни файла, ни флага удаления: оставляем как было
     }
 
     // адрес картинки для шаблонов

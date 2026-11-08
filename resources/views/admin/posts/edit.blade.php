@@ -31,6 +31,10 @@
             <div class="card card-primary">
                 <div class="card-header">
                     <h3 class="card-title">Пост «{{ $post->title }}»</h3>
+                    {{-- <- дата последнего изменения (поле updated_at ведёт Laravel) --}}
+                    <div class="card-tools mr-2">
+                        <small>Последнее обновление: {{ $post->updated_at->format('d.m.Y H:i') }}</small>
+                    </div>
                 </div>
                 <!-- /.card-header -->
 
@@ -130,19 +134,37 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="thumbnail">Изображение</label>
-                            <div class="input-group">
-                                <div class="custom-file">
-                                    <input type="file" name="thumbnail" id="thumbnail"
-                                           class="custom-file-input" accept="image/*">
-                                    <label class="custom-file-label" for="thumbnail">Выберите файл</label>
+                            <label>Изображение</label>
+                            <div class="d-flex align-items-start" style="gap: 1rem;">
+                                <div class="text-center">
+                                    <img src="{{ $post->getImage() }}" alt="" class="img-thumbnail" width="120">
+                                    <div class="small text-muted mt-1">
+                                        {{ $post->thumbnail ? 'Текущее' : 'Нет изображения' }}
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="custom-file">
+                                        <input type="file" name="thumbnail" id="thumbnail"
+                                               class="custom-file-input @error('thumbnail') is-invalid @enderror"
+                                               accept="image/*">
+                                        <label class="custom-file-label" for="thumbnail">
+                                            {{ $post->thumbnail ? 'Заменить изображение' : 'Выберите файл' }}
+                                        </label>
+                                    </div>
+                                    @if ($post->thumbnail)
+                                        <div class="form-check mt-2">
+                                            <input type="checkbox" class="form-check-input"
+                                                   name="remove_thumbnail" id="remove_thumbnail" value="1">
+                                            <label class="form-check-label text-danger" for="remove_thumbnail">
+                                                Удалить изображение
+                                            </label>
+                                        </div>
+                                    @endif
+                                    @error('thumbnail')
+                                        <span class="text-danger small d-block mt-1">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
-                            <div><img src="{{ $post->getImage() }}" alt="" class="img-thumbnail mt-2 mb-2" width="200"></div>
-                            <small class="text-muted">Оставьте пустым, чтобы сохранить текущее изображение</small>
-                            @error('thumbnail')
-                                <span class="text-danger small d-block">{{ $message }}</span>
-                            @enderror
                         </div>
 
                         <div class="form-group">
@@ -174,5 +196,16 @@
         </div>
     </div>
 </section>
+@push('scripts')
+<script>
+    // показать имя выбранного файла вместо подписи «Заменить изображение»
+    $('.custom-file-input').on('change', function () {
+        if (this.files[0]) {
+            $(this).next('.custom-file-label').text(this.files[0].name);
+        }
+    });
+</script>
+@endpush
+
 @include('admin.posts._editor')
 @endsection
