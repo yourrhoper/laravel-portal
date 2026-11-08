@@ -13,6 +13,9 @@
             <file>file:/C:/OSPanel/home/laravel.blog/routes/web.php</file>
             <file>file:/C:/OSPanel/home/laravel.blog/database/migrations/2026_10_24_065541_add_published_at_and_user_id_to_posts_table.php</file>
             <file>file:/C:/OSPanel/home/laravel.blog/app/Http/Controllers/Admin/TagController.php</file>
+            <file>file:/C:/OSPanel/home/laravel.blog/resources/views/admin/index.blade.php</file>
+            <file>file:/C:/OSPanel/home/laravel.blog/resources/views/admin/tags/index.blade.php</file>
+            <file>file:/C:/OSPanel/home/laravel.blog/composer.json</file>
         </group>
     </open-files>
 </project-private>
